@@ -13,6 +13,7 @@ const daysRef = document.querySelector('[data-days]');
 const hoursRef = document.querySelector('[data-hours]');
 const minutesRef = document.querySelector('[data-minutes]');
 const secondsRef = document.querySelector('[data-seconds]');
+const inputRef = document.querySelector('#datetime-picker');
 
 const options = {
   enableTime: true,
@@ -33,6 +34,14 @@ const calendar = flatpickr('#datetime-picker', options);
 startBtnRef.addEventListener('click', onBtnStartClick);
 
 function onBtnStartClick() {
+  inputRef.addEventListener(
+    'click',
+    () => {
+      clearInterval(intevalId);
+      clearTimerInterface();
+    },
+    { once: true }
+  );
   const intevalId = setInterval(() => {
     const ms = calendar.selectedDates[0].getTime() - Date.now();
     if (
@@ -52,6 +61,13 @@ function updateTimerInterface({ days, hours, minutes, seconds }) {
   hoursRef.textContent = addLeadingZero(hours);
   minutesRef.textContent = addLeadingZero(minutes);
   secondsRef.textContent = addLeadingZero(seconds);
+}
+
+function clearTimerInterface() {
+  daysRef.textContent = '00';
+  hoursRef.textContent = '00';
+  minutesRef.textContent = '00';
+  secondsRef.textContent = '00';
 }
 
 function convertMs(ms) {
